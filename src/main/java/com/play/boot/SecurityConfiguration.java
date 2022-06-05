@@ -10,16 +10,18 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-		// http.authorizeRequests().anyRequest().authenticated().and().httpBasic();
-		http.authorizeRequests().anyRequest().authenticated().and().formLogin()
-				.and().httpBasic();
+
+		http.authorizeRequests().antMatchers("/", "/h2-console/**")
+				.authenticated().and().formLogin().and().httpBasic();
+		http.csrf().disable();
+		http.headers().frameOptions().disable();
 	}
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth)
 			throws Exception {
 		// Spring Security 5 requires specifying the password storage format
-		auth.inMemoryAuthentication().withUser("user").password("{noop}pass")
+		auth.inMemoryAuthentication().withUser("root").password("{noop}r00t")
 				.roles("USER");
 	}
 
